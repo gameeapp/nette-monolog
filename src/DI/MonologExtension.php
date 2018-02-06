@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gamee\Monolog\DI;
 
+use Monolog\Logger;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
 use Psr\Log\LoggerAwareInterface;
@@ -43,6 +44,10 @@ class MonologExtension extends CompilerExtension
 				->addTag(self::TAG_PRIORITY, ctype_digit($handlerName) ? $handlerName : 0)
 			;
 		}
+
+		$containerBuilder->addDefinition($this->prefix('logger'))
+			->setClass(Logger::class, [$config['name']])
+		;
 
 		foreach ($config['processors'] as $processorName => $implementation) {
 			Compiler::loadDefinitions($containerBuilder, [
