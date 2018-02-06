@@ -19,8 +19,8 @@
     }
   ],
   "autoload": {
-    "PSR-4": {
-      "Gamee//Monolog//": "src//"
+    "psr-4": {
+      "Gamee//Monolog//": "src/"
     }
   },
   "minimum-stability": "stable"
