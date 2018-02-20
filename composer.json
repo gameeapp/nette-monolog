@@ -1,5 +1,5 @@
 {
-  "name": "gameeapp/nette-monolog",
+  "name": "gamee/nette-monolog",
   "description": "The integration of monolog with nette/di",
   "type": "library",
   "require": {
