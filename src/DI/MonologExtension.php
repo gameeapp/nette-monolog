@@ -56,6 +56,9 @@ class MonologExtension extends CompilerExtension
 				->addTag(self::TAG_PROCESSOR)
 				->addTag(self::TAG_PRIORITY, ctype_digit($processorName) ? $processorName : 0);
 		}
+
+		$builder->addDefinition($this->prefix('logger'))
+			->setFactory(Logger::class, [$this->config['name']]);
 	}
 
 
@@ -63,8 +66,17 @@ class MonologExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$logger = $builder->addDefinition($this->prefix('logger'))
-			->setFactory(Logger::class, [$this->config['name']]);
+		$logger = $builder->getDefinition($this->prefix('logger'));
+
+		if ($logger instanceof ServiceDefinition) {
+			/**
+			 * OK
+			 */
+		} elseif ($logger instanceof FactoryDefinition) {
+			$logger = $logger->getResultDefinition();
+		} else {
+			throw new \UnexpectedValueException;
+		}
 
 		foreach ($handlers = $this->findByTagSorted(self::TAG_HANDLER) as $serviceName => $meta) {
 			$logger->addSetup('pushHandler', ['@' . $serviceName]);
