@@ -23,7 +23,7 @@ class MonologExtension extends CompilerExtension
 	/**
 	 * @var array|mixed[]
 	 */
-	private $defaults = [
+	private array $defaults = [
 		'handlers' => [],
 		'processors' => [],
 		'name' => 'app',
@@ -103,9 +103,9 @@ class MonologExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$services = $builder->findByTag($tag);
 
-		uksort($services, function ($nameA, $nameB) use ($builder) {
-			$priorityA = $builder->getDefinition($nameA)->getTag(self::TAG_PRIORITY) ?: 0;
-			$priorityB = $builder->getDefinition($nameB)->getTag(self::TAG_PRIORITY) ?: 0;
+		uksort($services, function ($nameA, $nameB) use ($builder): int {
+			$priorityA = $builder->getDefinition($nameA)->getTag(self::TAG_PRIORITY) ?? 0;
+			$priorityB = $builder->getDefinition($nameB)->getTag(self::TAG_PRIORITY) ?? 0;
 
 			return $priorityA <=> $priorityB;
 		});
